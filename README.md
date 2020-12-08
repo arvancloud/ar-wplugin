@@ -1,13 +1,13 @@
 # ArvanCloud CDN Wordpress Plugin
 WordPress Plugin for ArvanCloud CDN
 
-# brief
+# Brief
 Wordpress to config clear CDN Cache
 
-## Input:
+## Input
 User API Token available in arvancloud panel
 
-## Capabalities:
+## Capabalities
 * Set Cache On/Off
 * Total Purge
 * Clear a webpage cache after new post or change
