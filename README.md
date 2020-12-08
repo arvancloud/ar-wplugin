@@ -2,7 +2,7 @@
 WordPress Plugin for ArvanCloud CDN
 
 # Brief
-Wordpress to config clear CDN Cache
+Wordpress Plugin to config and clear CDN Cache
 
 ## Input
 User API Token available in arvancloud panel
