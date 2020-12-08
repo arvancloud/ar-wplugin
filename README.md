@@ -2,10 +2,15 @@
 WordPress Plugin for ArvanCloud CDN
 
 # brief
-"پلاگین وردپرس برای پاک کردن کش صفحات وب سایت پس از انتشار یا ویرایش یک خبر یا پست در وردپرس. 
+Wordpress to config clear CDN Cache
 
-ورودی: api key کاربر (قابل مشاهده در پنل ابرآروان)
-امکانات:
-- حذف کامل کش‌ CDN
-- کش یک صفحه ی خاص و صفحات مرتبط پس از ایجاد یک خبر یا پست جدید
-- حدف کش یک صفحه ی خاص و صفحات مرتبط پس از ویرایش یک خبر یا پست
+## Input:
+User API Token available in arvancloud panel
+
+## Capabalities:
+* Set Cache On/Off
+* Total Purge
+* Clear a webpage cache after new post or change
+
+## Useful Link
+https://www.arvancloud.com/docs/api/cdn/4.0 - automatic!
