@@ -1,4 +1,4 @@
-# ar-wplugin
+# ArvanCloud CDN Wordpress Plugin
 WordPress Plugin for ArvanCloud CDN
 
 # brief
@@ -13,4 +13,4 @@ User API Token available in arvancloud panel
 * Clear a webpage cache after new post or change
 
 ## Useful Link
-https://www.arvancloud.com/docs/api/cdn/4.0 - automatic!
+[CDN API Documentation](https://www.arvancloud.com/docs/api/cdn/4.0)
