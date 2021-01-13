@@ -28,8 +28,11 @@ class ArRequests {
         ]));
     }
 
-    public function purge() {
-        
+    public static function purge($url) {
+        return self::sendDelete("domains/{$url}/caching", json_encode([
+            "purge" => "individual",
+            [$url]
+        ]));
     }
 
     public static function purgeAll($domain) {
@@ -135,11 +138,12 @@ class ArRequests {
 
         $response = curl_exec($curl);
         $err = curl_error($curl);
-        
+
         curl_close($curl);
 
         if (!$err)
             return $response;
         return false;
     }
+
 }

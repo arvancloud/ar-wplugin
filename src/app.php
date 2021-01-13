@@ -32,3 +32,11 @@ function domains_menu() {
 function settings_menu() {
     require_once('settings.php');
 }
+
+function my_post_new($new_status, $old_status = null, $post = null){
+    if ($new_status == "publish"){
+        require_once('requests.php');
+        ArRequests::purge($post->guid);
+    }
+}
+add_action('transition_post_status', 'my_post_new', 10, 3);
