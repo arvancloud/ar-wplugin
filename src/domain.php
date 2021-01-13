@@ -2,7 +2,7 @@
 <?php 
 require_once('requests.php');
 if (isset($_POST['action'])) {
-    ArRequests::updateCachingSettings($_GET['domain'], $_POST['action']);
+    ArRequests::changeCachingStatus($_GET['domain'], $_POST['action']);
 }
 if (isset($_GET['purge'])) {
     if ($_GET['purge'] == 1)

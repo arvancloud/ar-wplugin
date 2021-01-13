@@ -93,11 +93,11 @@ class ArvanCloudDomains extends WP_List_Table {
         
         foreach ($domains->data as $domain) {
             array_push($table_data, [
-                'id'                =>  '<a href="#"> '. $i .' </a>',
-                'domain'            =>  '<a href="#"> '. $domain->domain .' </a>',
+                'id'                =>  '<a href="'."http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]&domain=".$domain->domain.'"> '. $i .' </a>',
+                'domain'            =>  '<a href="'."http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]&domain=".$domain->domain.'"> '. $domain->domain .' </a>',
                 'status'            =>  $this->statusToHumanReadable($domain->status),
                 'cloud_security'    =>  ($domain->services->cloud_security) ? '<code style="color: green;"> فعال </code>' : '<code style="color: red;"> غیرفعال </code>',
-                'remove'            =>  '<a href="?action=remove&uuid='. $domain->id .'"> <span style="color:red;"> حذف </span> </a>'
+                'remove'            =>  '<a href="'."http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]&action=remove&d=".$domain->domain."&uuid=".$domain->id.'"> <span style="color:red;"> حذف </span> </a>'
             ]);
             $i++;
         }

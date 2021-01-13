@@ -16,9 +16,15 @@ class ArRequests {
         self::$initialized = true;
     }
 
-    public function changeCachingStatus($domain, $status) {
+    public static function changeCachingStatus($domain, $status) {
         return self::sendPatch("domains/{$domain}/caching", json_encode([
             'cache_status'  =>  $status
+        ]));
+    }
+
+    public static function removeDomain($domain, $uuid) { // There too redirects for api
+        return self::sendDelete("domains/{$domain}", json_encode([
+            'id'    =>  $uuid
         ]));
     }
 
@@ -85,7 +91,7 @@ class ArRequests {
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_ENCODING => "",
         CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 30,
+        CURLOPT_TIMEOUT => 60,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => "PATCH",
         CURLOPT_POSTFIELDS => $data,
@@ -115,7 +121,7 @@ class ArRequests {
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_ENCODING => "",
         CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 30,
+        CURLOPT_TIMEOUT => 60,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => "DELETE",
         CURLOPT_POSTFIELDS => $data,
@@ -125,6 +131,7 @@ class ArRequests {
             "content-type: application/json"
         ),
         ));
+        curl_setopt( $curl, CURLOPT_MAXREDIRS, 100 );
 
         $response = curl_exec($curl);
         $err = curl_error($curl);
