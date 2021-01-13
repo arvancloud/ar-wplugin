@@ -3,7 +3,11 @@
 if(!class_exists('Link_List_Table'))
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 
-new ArvanCloudDomains();
+if (isset($_GET['domain'])) {
+    require_once('domain.php');
+}else {
+    new ArvanCloudDomains();
+}
 
 class ArvanCloudDomains extends WP_List_Table {
 
@@ -97,7 +101,7 @@ class ArvanCloudDomains extends WP_List_Table {
             ]);
             $i++;
         }
-        
+
         unset($i);
         return $table_data;
     }
