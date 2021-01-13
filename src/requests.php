@@ -40,9 +40,9 @@ class ArRequests {
 
     }
 
-    private static function getAPIKey () : string { return get_option('ar_api_key'); }
+    public static function getAPIKey () : string { return get_option('ar_api_key'); }
 
-    private function setApiKey($key) : bool { return update_option('ar_api_key', $key); }
+    public static function setApiKey($key) : bool { return update_option('ar_api_key', $key); }
 
     public function checkConnection() {
 

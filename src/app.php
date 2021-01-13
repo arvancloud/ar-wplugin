@@ -13,11 +13,22 @@ function ar_main_menu() {
         'dashicons-cloud',
         6
     );
+    add_submenu_page( 
+        'arvancloud',
+        __( 'Settings', AR_TEXT_DOMAIN),
+        __( 'Settings', AR_TEXT_DOMAIN),
+        'manage_options',
+        'arvancloud-settings',
+        'settings_menu'
+    );
 }
 
 add_action( 'admin_menu', 'ar_main_menu' );
 
 function domains_menu() {
-    # show domains
     require_once('domains.php');
+}
+
+function settings_menu() {
+    require_once('settings.php');
 }
