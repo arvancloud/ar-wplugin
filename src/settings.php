@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) or exit;
+
 require_once('requests.php');
 if (isset($_POST['submit'])) {
     if (!isset($_POST['ar_cdn_api_key']))
