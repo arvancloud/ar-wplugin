@@ -4,6 +4,10 @@ require_once('requests.php');
 if (isset($_POST['action'])) {
     ArRequests::updateCachingSettings($_GET['domain'], $_POST['action']);
 }
+if (isset($_GET['purge'])) {
+    if ($_GET['purge'] == 1)
+        ArRequests::purgeAll($_GET['domain']);
+}
 ?>
 <link rel="stylesheet" href="<?php echo plugin_dir_url(__DIR__);?>assets/ar-wplugin.css">
 
@@ -206,3 +210,11 @@ advance.onclick = function() {
 };
 
 </script>
+
+<div class="card">
+    <h2 class="title">حذف اطلاعات Cache شده</h2>
+    <p>
+    پاک‌سازی فایل‌های Cache شده می‌تواند به‌طور موقت سرعت وب‌سایت شما را کاهش دهد.
+</p>
+<a href="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]&purge=1" ?>" style="color:red;"> پاک کردن همه چیز</a>
+</div>
