@@ -19,4 +19,5 @@ add_action( 'admin_menu', 'ar_main_menu' );
 
 function domains_menu() {
     # show domains
+    require_once('domains.php');
 }
