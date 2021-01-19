@@ -34,6 +34,8 @@ class ArPluginCore{
     */
     public function __construct(){
 
+        
+        
         // Loads the optionpanel/framework.php
         $this->include_redux_core();
         
@@ -74,8 +76,16 @@ class ArPluginCore{
         /**
          * To purge specific post url cache
          */
-        add_action("save_post", array($this,"arvan_save_post_action"),1,3);
+        add_action("publish_post", array($this,"arvan_save_post_action"),1,3);
 
+    }
+
+    private function get_domain_list(){
+        $domains = array();
+
+
+
+        return $domains;
     }
 
 
@@ -90,7 +100,7 @@ class ArPluginCore{
          * Load Cache EndPoint URL from plugin options to make a request
          */
         $arvan_url =  Redux::get_option( $this->opt_name, 'arvan-cache-endpoint-url');
-        
+        $
         
         /**
          * Load API-Key from plugin options
@@ -261,7 +271,6 @@ class ArPluginCore{
             'redirection' => 5,
             'httpversion' => '1.0',
             'blocking'    => true,
-            
             'headers'     => array('Content-Type' => 'application/json; charset=utf-8','Authorization' => $arvan_api_key),
             'body'        => $body,
             'data_format' => 'body'
@@ -314,13 +323,6 @@ class ArPluginCore{
         if ( is_wp_error( $response ) ) {
             $error_message = $response->get_error_message();
             return "Something went wrong: $error_message";
-        }else{
-            if(!isset($response['body']))
-                return;
-                
-            $response_object = json_decode($response['body']);
-            wp_send_json_success($response_object);
-            
         }
     
         
