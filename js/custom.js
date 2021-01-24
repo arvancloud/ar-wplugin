@@ -1,20 +1,22 @@
 jQuery(document).ready(function(){
 
+    let $purge_button;
+
     jQuery('#arvan-total-purge').on('click',function(){
 
         $purge_button = jQuery(this);
 
+        $purge_button.prop('disabled', true);
+        request_total_purge($purge_button);
+        //$purge_button.prop('disabled', false);
         
-        request_total_purge();
-
-        //$purge_button.prop('disabled', true);
         
     });
 
 });
 
 
-function request_total_purge(){
+function request_total_purge($purge_button){
     
     const wpnounce = jQuery('#_wpnonce').val();
     
@@ -31,13 +33,16 @@ function request_total_purge(){
         
         if(msg.data.message.trim() == "cdn/msg.caching.purge"){
           alert('Done');
+          $purge_button.prop('disabled', false);
           return;
         }
+        $purge_button.prop('disabled', false);
         alert(msg.data.message);
       });
        
       request.fail(function( jqXHR, textStatus ) {
         console.log(textStatus);
+        $purge_button.prop('disabled', false);
       });
 
 }

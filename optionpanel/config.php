@@ -7,6 +7,14 @@ if ( ! class_exists( 'Redux' ) ) {
 
 $opt_name = 'arvan';
 
+$redux = ArPluginCore::getInstance();
+$domain_list = $redux->get_domain_list();
+
+$domains = array();
+
+foreach($domain_list as $item){
+    $domains[$item] = $item;
+}
 
 
 
@@ -57,9 +65,20 @@ Redux::setSection( $opt_name,
                 
                 
             ),
-            
+            array(
+
+                'id'       => 'arvan-domain',
+                'type'     => 'select',
+                'title'    => __('Select a Domain', 'arvancloud-theme-textdomain'), 
+                'subtitle' => __('Select a default domain from list', 'arvancloud-theme-textdomain'),
+                'desc'     => __('', 'arvancloud-theme-textdomain'),
+                
+                'options'  => $domains,
+                'default'  => '',
+                )
+                        
+            )       
         )
-    )
 );
 
 Redux::setSection( $opt_name,

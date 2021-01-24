@@ -27,14 +27,15 @@ defined( 'ABSPATH' ) || exit;
 
 class ArPluginCore{
     
-    private  $opt_name = 'arvan';
-
+    private         $opt_name = 'arvan';
+    public static  $instance = null;
     /**
     * Constructor initialize and load default values
     */
     public function __construct(){
 
         
+
         
         // Loads the optionpanel/framework.php
         $this->include_redux_core();
@@ -44,7 +45,7 @@ class ArPluginCore{
         //optionpanel/config.php
         $this->inlcude_redux_config();
         
-        
+        $this->get_domain_list();
         
         /**
          * This code loads the cache status from ArvanCloud
@@ -80,10 +81,38 @@ class ArPluginCore{
 
     }
 
+    public static function getInstance(){
+        
+        if(self::$instance == null)
+            self::$instance = new self();
+        return self::$instance;
+    }
+
     private function get_domain_list(){
         $domains = array();
 
+        $arvan_url =  Redux::get_option( $this->opt_name, 'arvan-cache-endpoint-url');
+        $arvan_api_key =  Redux::get_option( $this->opt_name, 'arvan-api-key');
+        
 
+        
+        
+        $response = wp_remote_get( $arvan_url, array(
+            'headers'     => array('Content-Type' => 'application/json; charset=utf-8','Authorization' => $arvan_api_key),
+            )
+        );
+        $domains = null;
+        if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+            $headers = $response['headers']; // array of http header lines
+            $body    = $response['body']; // use the content
+            $responseBody = wp_remote_retrieve_body( $response );
+            $decoded_data = json_decode($responseBody)->data;
+            $domains = array();
+            foreach($decoded_data as $data){
+                $domains[] = $data->domain;
+            }
+            
+        }
 
         return $domains;
     }
@@ -100,8 +129,8 @@ class ArPluginCore{
          * Load Cache EndPoint URL from plugin options to make a request
          */
         $arvan_url =  Redux::get_option( $this->opt_name, 'arvan-cache-endpoint-url');
-        $
-        
+        $domain = Redux::get_option( $this->opt_name, 'arvan-domain');
+        $full_url = $arvan_url . $domain . '/caching';
         /**
          * Load API-Key from plugin options
          */
@@ -111,18 +140,15 @@ class ArPluginCore{
         /**
          * Make a request to server
          */
-        $response = wp_remote_post( $arvan_url, array(
-            'method'      => 'GET',
-            'timeout'     => 45,
-            'redirection' => 5,
-            'httpversion' => '1.0',
-            'blocking'    => true,
+        $response = wp_remote_get( $full_url , array(
+            
+            
             'headers'     => array('Authorization' => $arvan_api_key),
-            'cookies'     => array()
+           
             )
         );
 
-        
+
         if ( is_wp_error( $response ) ) {
   
             $error_message = $response->get_error_message();
@@ -203,13 +229,15 @@ class ArPluginCore{
              * Making Purge request URL
              */
             $arvan_url =  Redux::get_option( $this->opt_name, 'arvan-cache-endpoint-url');
+            $domain = Redux::get_option( $this->opt_name, 'arvan-domain');
+            $full_url = $arvan_url . $domain . '/caching';
             
             if(empty($arvan_url)){
                 wp_send_json_error(array("message"=>"Endpoint url is empty"));
                 return;
             }
 
-            $arvan_url .=  '?purge=all';
+            $full_url .=  '?purge=all';
             
             $arvan_api_key =  Redux::get_option( $this->opt_name, 'arvan-api-key');
             
@@ -218,15 +246,10 @@ class ArPluginCore{
                 return;
             }
 
-            $response = wp_remote_post( $arvan_url, array(
-
+            $response = wp_remote_get( $full_url, array(
                 'method'      => 'DELETE',
-                'timeout'     => 45,
-                'redirection' => 5,
-                'httpversion' => '1.0',
                 'blocking'    => true,
                 'headers'     => array('Authorization' => $arvan_api_key),
-                
                 )
             );
             
@@ -258,18 +281,18 @@ class ArPluginCore{
      */
     public function redux_after_saved($value){
         
-        
-        $arvan_url =  Redux::get_option( $this->opt_name, 'arvan-cache-endpoint-url');
         $arvan_api_key =  Redux::get_option( $this->opt_name, 'arvan-api-key');
-        
+        $arvan_url =  Redux::get_option( $this->opt_name, 'arvan-cache-endpoint-url');
+        $domain = Redux::get_option( $this->opt_name, 'arvan-domain');
+        $full_url = $arvan_url . $domain . '/caching';
 
         
+        
+        
         $body = '{"cache_status":"'. $value['arvan-cache-status'] .'"}';
-        $response = wp_remote_post( $arvan_url, array(
+        $response = wp_remote_post( $full_url, array(
             'method'      => 'PATCH',
-            'timeout'     => 45,
-            'redirection' => 5,
-            'httpversion' => '1.0',
+            
             'blocking'    => true,
             'headers'     => array('Content-Type' => 'application/json; charset=utf-8','Authorization' => $arvan_api_key),
             'body'        => $body,
@@ -289,7 +312,7 @@ class ArPluginCore{
      * Function will be used for clear a webpage cache after new post or change
      * When a new post created it makes a request to ArvanCloud to purge the cached url
      */
-    public function arvan_save_post_action($post_id, $post, $update ){
+    public function arvan_save_post_action($post_id ){
         
         
         $purge_after_save_status =  Redux::get_option( $this->opt_name, 'arvan-save-post-status');
@@ -305,16 +328,18 @@ class ArPluginCore{
         $url = get_permalink($post_id);
 
         
-        $arvan_url =  Redux::get_option( $this->opt_name, 'arvan-cache-endpoint-url') . '?purge=individual&purge_urls='. $url;
+        
+        $arvan_url =  Redux::get_option( $this->opt_name, 'arvan-cache-endpoint-url');
+        $domain = Redux::get_option( $this->opt_name, 'arvan-domain');
+        $full_url = $arvan_url . $domain . '/caching';
+        
+        $full_url .= '?purge=individual&purge_urls='. $url;
+     
         $arvan_api_key =  Redux::get_option( $this->opt_name, 'arvan-api-key');
         
-        $response = wp_remote_post( $arvan_url, array(
+        $response = wp_remote_get( $full_url, array(
             'method'      => 'DELETE',
-            'timeout'     => 45,
-            'redirection' => 5,
-            'httpversion' => '1.0',
             'blocking'    => true,
-            
             'headers'     => array('Authorization' => $arvan_api_key),
             
             )
@@ -333,4 +358,4 @@ class ArPluginCore{
 /**
  * Everything starts from here
  */
-$arPluginCore = new ArPluginCore();
+$arPluginCore = ArPluginCore::getInstance();
