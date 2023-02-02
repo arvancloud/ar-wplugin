@@ -57,7 +57,7 @@ Redux::setSection( $opt_name,
                 'id'       => 'arvan-cache-endpoint-url',
                 'type'     => 'text',
                 'title'    => esc_html__( 'Cache Endpoint URL', 'arvancloud-theme-textdomain' ),
-                'desc'     => esc_html__( 'https://napi.arvancloud.com/cdn/4.0/domains/', 'arvancloud-theme-textdomain' ),
+                'desc'     => esc_html__( 'https://napi.arvancloud.ir/cdn/4.0/domains/', 'arvancloud-theme-textdomain' ),
                 'subtitle' => esc_html__( 'ArvanCloud API url', 'arvancloud-theme-textdomain' ),
                 'hint'     => array(
                                 'content' => 'Cache Endpoint URL',
