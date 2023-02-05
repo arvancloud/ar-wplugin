@@ -13,7 +13,7 @@ User API Token available in arvancloud panel
 * Clear a webpage cache after new post or change
 
 ## Useful Link
-[CDN API Documentation](https://www.arvancloud.com/docs/api/cdn/4.0)
+[CDN API Documentation](https://www.arvancloud.ir/api/cdn/4.0)
 
 
 ## Terms and Conditions
